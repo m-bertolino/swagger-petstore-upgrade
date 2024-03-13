@@ -53,10 +53,13 @@ public class PetController {
     }
 
     public ResponseContext getPetById(final RequestContext request, final Long petId) {
+        String headerName = "X-company-private-data";
+        String headerValue = "Custom Value";
         if (petId == null) {
             return new ResponseContext()
                     .status(Response.Status.BAD_REQUEST)
-                    .entity("No petId provided. Try again?");
+                    .entity("No petId provided. Try again?")
+                    .header(headerName, headerValue);
         }
 
         final Pet pet = petData.getPetById(petId);
@@ -64,10 +67,11 @@ public class PetController {
         if (pet != null) {
             return new ResponseContext()
                     .contentType(Util.getMediaType(request))
-                    .entity(pet);
+                    .entity(pet)
+                    .header(headerName, headerValue);
         }
 
-        return new ResponseContext().status(Response.Status.NOT_FOUND).entity("Pet not found");
+        return new ResponseContext().status(Response.Status.NOT_FOUND).entity("Pet not found").header(headerName, headerValue);
     }
 
     public ResponseContext updatePetWithForm(final RequestContext request, final Long petId, final String name, final String status) {
